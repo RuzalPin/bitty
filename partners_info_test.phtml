@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="./fs/css/jquery-ui.css"/>
+<script type="text/javascript" src="./fs/js/jquery-ui.js"></script>
+<script type="text/javascript" src="./fs/js/jquery.tablesorter.js"></script>
+<style type="text/css">
+    tr.A td{
+        border-bottom: none;
+    }
+    tr.A+tr td{
+        border-top: none;
+    }
+</style>
+<p>Введите промокод партнера</p>
+<form method="post" name="cashout_form" onsubmit="return false;">
+    <input style="display: none" name="page" value="partners/partners_info" />
+    <input id="promo" name="promo" value="<?=isset($_REQUEST['promo'])?$_REQUEST['promo']:''?>">
+    <input type="submit" value="Показать" name="show" class="btn btn-success">
+</form>
+<br/>
+<div>
+    <style>
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            border-radius: 10px;
+            border-spacing: 0;
+            text-align: center;
+        }
+        th {
+            background: steelblue;
+            color: black;
+            padding: 10px 20px;
+        }
+        th, td {
+            border-style: solid;
+            border-width: 0 1px 1px 0;
+            border-color: white;
+        }
+        th:first-child, td:first-child {
+            text-align: left;
+        }
+        th:first-child {
+            border-top-left-radius: 10px;
+        }
+        th:last-child {
+            border-top-right-radius: 10px;
+            border-right: none;
+        }
+        td {
+            padding: 10px 20px;
+            background: #F8E391;
+        }
+        tr:last-child td:first-child {
+            border-radius: 0 0 0 10px;
+        }
+        tr:last-child td:last-child {
+            border-radius: 0 0 10px 0;
+        }
+        tr td:last-child {
+            border-right: none;
+        }
+    </style>
+
+<?php
+if(isset($_REQUEST['promo'])) {
+    DBw()->Exec("SET @promo = " . (DBw()->Quote(isset($_REQUEST['promo']) ? $_REQUEST['promo'] : '')));
+
+
+    $query = "
+	SELECT
+	  '0_o' `-`,
+	  'o_0' `sum`,
+	  COUNT(`login`) `Count`,
+	  'time_stamp' `time` 
+	FROM
+	  `table`.`players`
+	WHERE `code` = @promo AND `time` BETWEEN '01.01.2017' AND '18.10.2018'
+;";
+    $result = DBw()->Select($query)->fetchAll();
+    print_r($result,true);
+
+   if($result['1']['Count'] != 0){
+        echo "<table>
+        <tr>
+            <th>Данные</th>
+            <th>Сумма</th>
+            <th>Количество</th>
+             <th>time</th>
+        </tr>";
+        foreach ($result as $value) {
+            //echo $result[$key]['month'];
+            //print_r($result[]['month']);
+            echo "<tr><td>";
+            print_r($value['-']);
+            echo "</td><td>";
+            print_r($value['sum']);
+            echo "</td><td>";
+            print_r($value['Count']);
+            echo "</td><td>";
+            print_r($value['time']);
+            echo "</td></tr>";
+        }
+    }
+    else{
+        print_r("Регистраций по этому промокоду нет.");
+    }
+}
+
+
+
+
+    ?>
+
+
+
+
+    </table>
+
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('form').on('submit', function e() {
+            window.location.href = 'admin.php?page=partners/partners_info&promo='+ $('input[name=promo]').val();
+            event.stopPropagation();
+        });
+
+    });
+</script>
+
