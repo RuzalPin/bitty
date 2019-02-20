@@ -1,0 +1,13 @@
+# !/bin/bash
+process=$1
+
+if [ -n "$1" ] 
+then
+    echo "Чтобы остановить процесс $process"
+    ps aux | pgrep $process
+    echo "Введите kill -TERM '12345'"
+else
+	echo "Введите sudo ./kill_process имя процесса $process"
+fi
+
+
