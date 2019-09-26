@@ -1,0 +1,56 @@
+A=[1,2];B=[3,-1];C=[2,5];
+# x,y - coordinates
+# if x or y =0 then line = x1-x2 or y1-y2...
+# else x1-x2=x, y1-y2=y, x^2+y^2 = line
+# find max line, check if shorter 2 lines sqrt, then yes, else not
+def setLine(lineXY)
+  if lineXY[0]==0
+    xy = lineXY[1]
+  elsif lineXY[1]==0
+    xy = lineXY[0]  
+  elsif lineXY[0] != 0 && lineXY[1] !=0
+    xy = lineXY[0]**lineXY[1];
+  end
+  return xy
+end
+
+def maxLine(arr)
+  max = arr[0]
+  for i in arr
+    if i > max
+      max = i
+    end
+  end
+return max  
+end
+
+def setLines(arr)
+  lines = [];
+  for i in arr
+    lines.push(setLine(i))
+  end
+  return lines;
+end     
+
+def isTriangle(lines)
+  answer = false
+  max = maxLine(lines)
+  lines.delete(max)
+  if lines.any?
+      if ( (lines[0]**2) + (lines[1]**2) == max**2 )
+        answer = true
+    end
+  end  
+  return answer
+end
+
+ABLine = [(A[0]-B[0]).abs,(A[1]-B[1]).abs];
+BCLine = [(B[0]-C[0]).abs,(B[1]-C[1]).abs];
+CALine = [(C[0]-A[0]).abs,(C[1]-C[1]).abs];
+AB=0;
+BC=0;
+CA=0;
+
+abstractABC = [ABLine,BCLine,CALine];
+lines = setLines(abstractABC);
+isTriangle(lines);
